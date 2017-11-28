@@ -91,10 +91,17 @@ predict(reg,newdata = survey[is.na(survey$Height),])
 library(UsingR)
 plot(enjoyed ~ age,data=tastesgreat)
 reg<-glm(enjoyed ~ age, data=tastesgreat,family = binomial)
+curve(exp(reg$coefficients[1]+reg$coefficients[2]*x)/
+        (1+exp(reg$coefficients[1]+reg$coefficients[2]*x)),30,60,add = T,col=2)
+
+# A probabilidade de gostar do produto dado a idade
 predict(reg,type = 'response')
+
+# Como interpretar os coeficiente?
+summary(reg)
 exp(reg$coefficients[2])
 
-# exemplo do tastesgreat - 2 regressor
+# exemplo do tastesgreat - 2 regressor (idade e gênero)
 reg<-glm(enjoyed ~ age + gender, data=tastesgreat,family = binomial)
 predict(reg,type = 'response')
 
