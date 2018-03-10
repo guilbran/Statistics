@@ -6,4 +6,4 @@ Please pay attention in the version cause several updates are made.
 
 Suggestions and comments are welcome.
 
-Enjoy and have fun!
+Enjoy and have fun! :muscle:  :satisfied:
