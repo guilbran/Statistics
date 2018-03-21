@@ -9,6 +9,8 @@
 ##########################################
 
 
+# Dados no R --------------------------------------------------------------
+
 ## Dados do R
 ChickWeight     # Sou um produtor e desejo escolher a melhor forma de alimentação
 esoph           # Campanha para redução do abuso de alcool e tabaco, causa cancer de esofago
@@ -25,7 +27,8 @@ alturas
 # Todos os problemas estatísticos estão relacionados com a COLETA, DESCRIÇÃO e ANÁLISE DE DADOS.
 # Nesse primeiro tópico falaremos da DESCRIÇÃO.
 
-#### Parte 1 ####
+
+# Medidas univariadas -----------------------------------------------------
 setwd('material aula')
 df<-read.csv2('./material aula/aula 1/altura_e_peso.csv')
 
@@ -66,11 +69,17 @@ hist(altura,breaks = seq(from=140,to=200,by=1))
 # Isto é feito para que a área total do histograma seja igual a 1.
 hist(altura,prob=T)
 
-## Estatísticas de síntese (centralidade e dispersão)
+## Estatísticas de síntese (centralidade)
 # média
 mean(altura)
 # mediana
 median(altura)
+
+## Estatísticas de síntese (dispersão)
+# Variância
+var(altura)
+# desvio-padrão (Standard Deviation)
+sd(altura)
 # quantis
 quantile(altura)                           # quartis
 quantile(altura,probs = seq(0,1,by=0.1))   # decis
@@ -81,10 +90,9 @@ as.numeric(quantile(altura)[4]-quantile(altura)[2])
 # Boxplot
 boxplot(altura,main = 'Boxplot das alturas')
 points(mean(altura),col = 2,pch = 20)          # introduzindo a média
-# desvio-padrão (Standard Deviation)
-sd(altura)
 
-##### Parte 2 
+
+# Medidas multivariadas ---------------------------------------------------
 # Vamos agora estudar o comportamento conjunto das duas variáveis
 plot(df$peso,df$altura,xlab='peso',ylab='altura')
 
@@ -114,18 +122,6 @@ scatterhist = function(x, y, xlab="", ylab=""){
 }
 # autoria: https://www.r-bloggers.com/example-8-41-scatterplot-with-marginal-histograms/
 scatterhist(df$peso,df$altura,xlab='peso',ylab='altura')
-
-
-# install.packages('plot3D')
-library(plot3D)
-##  Crio os cortes:
-x_c <- cut(df$peso, seq(50,105,by=5))
-y_c <- cut(df$altura, seq(140,200,by=5))
-##  Tabela de frequências:
-z <- table(x_c, y_c)
-##  Plot as a 3D histogram:
-hist3D(z=z, border="black",xlab='peso',ylab='altura',zlab='freq')
-
 
 # Box-plot
 range(df$peso)
@@ -165,6 +161,39 @@ library(corrplot)
 corrplot(cor(df[,1:2]))
 # Exemplo com outra base de dados
 corrplot(cor(mtcars))
+
+
+## Parênteses: Família lapply, sapply e tapply
+# Vamos utilizar o exemplo do pacote swirl, com a base de dados flags
+# Para mais informações ver:
+# https://archive.ics.uci.edu/ml/datasets/Flags
+flags <- readRDS('./flags.rds')
+
+# classe de flags
+class(flags)
+
+# classe de cada coluna em lista
+lapply(flags,class)
+
+# classe de cada coluna em data.frame (ou vetor)
+sapply(flags,class)
+
+# Determinada cor aparecer em quantas bandeiras?
+flags_colors <- flags[,11:17]
+sapply(flags_colors,sum)
+sapply(flags_colors,function(x) sum(x))
+
+# População por continente
+tapply(flags$population, flags$landmass, sum)
+
+# Porcentagem da população mundial por continente
+(pop_mundial <- sum(flags$population))
+tapply(flags$population, flags$landmass, function(x) sum(x)/pop_mundial)
+
+# População mundial por continente, por lingua oficial
+(ans <- tapply(flags$population, list(flags$landmass,flags$language),sum))
+rowSums(ans,na.rm = T)
+
 
 # Exercício ChickWeight
 # Apresentação da base de dados.
