@@ -109,7 +109,8 @@ exp(reg$coefficients[3])
 
 # Segundo esse modelo responda:
 # Qual a probabilidade de uma mulher de 34 anos e um homem de 25,2 anos gostarem do produto?
-predict(reg,newdata = data.frame(gender = c('Female','Male'),age = c(34,25.2)),type = 'response')
+newdata <- data.frame(gender = c('Female','Male'),age = c(34,25.2))
+predict(reg,newdata,type = 'response')
 
 
 # Exercício Titanic
