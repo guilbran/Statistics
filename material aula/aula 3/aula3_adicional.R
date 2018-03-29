@@ -9,7 +9,7 @@
 ##########################################
 
 ## Visualização gráfica
-
+# install.packages('rgl')
 library(rgl)
 survey <- readRDS('./material aula/aula 3/survey.rds')
 
@@ -85,6 +85,10 @@ survey_train <- survey_complete[-indices_test,]
 
 reg1 <- lm(Height ~ Wr.Hnd + Sex,data=survey_train)
 
+plot(survey$Wr.Hnd,survey$Height)
+abline(reg1)
+abline(reg,col=2)
+
 # previsão fora da amostra
 predict(reg1,survey_test)
 # erro fora da amostra
@@ -93,7 +97,7 @@ erro <- survey_test$Height - predict(reg1,survey_test)
 # Erro quadrático médio de previsão (MSFE)
 mean(erro^2)
 
-# Raíz do erro quadrático médio (RMSFE)
+# Raíz do erro quadrático médio de previsão (RMSFE)
 rmsfe <- sqrt(mean(erro^2))
 
 # comparação
@@ -117,7 +121,6 @@ for(i in 1:dim(indices_test_matrix)[1]){
   survey_test <- survey_complete[indices_test_1,]
   survey_train <- survey_complete[-indices_test_1,]
   reg1 <- lm(Height ~ Wr.Hnd + Sex,data=survey_train)
-  predict(reg1,survey_test)
   erro <- survey_test$Height - predict(reg1,survey_test)
   rmsfe_k[i] <- sqrt(mean(erro^2))
 }
