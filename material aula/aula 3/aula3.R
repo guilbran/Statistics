@@ -83,6 +83,8 @@ summary(reg)
 # qual a melhor previsão para os dados que estão missings (NA).
 predict(reg,newdata = survey[is.na(survey$Height),])
 
+predict(reg,newdata = survey[is.na(survey$Height),])
+
 ### Logit
 # exemplo do tastesgreat - 1 regressor
 # Carregando a base de dados tastesgreat do pacote UsingR
@@ -90,10 +92,19 @@ tastesgreat <- readRDS('./material aula/aula 3/tastesgreat.rds')
 plot(enjoyed ~ age,data=tastesgreat)
 reg<-glm(enjoyed ~ age, data=tastesgreat,family = binomial)
 curve(exp(reg$coefficients[1]+reg$coefficients[2]*x)/
-        (1+exp(reg$coefficients[1]+reg$coefficients[2]*x)),30,60,add = T,col=2)
+        (1+exp(reg$coefficients[1]+reg$coefficients[2]*x)),30,60,
+      add = T,col=2)
+
 
 # A probabilidade de gostar do produto dado a idade
 predict(reg,type = 'response')
+predict(reg)
+
+enjoyed_p <- ifelse(predict(reg)>0.5,1,0)
+points(enjoyed_p ~ tastesgreat$age,col = 3)
+
+sum(enjoyed_p == tastesgreat$enjoyed)/40
+sum(enjoyed_p != tastesgreat$enjoyed)/40
 
 # Como interpretar os coeficiente?
 summary(reg)
@@ -106,6 +117,9 @@ predict(reg,type = 'response')
 exp(reg$coefficients[2])
 exp(reg$coefficients[3])
 
+enjoyed_p <- ifelse(predict(reg)>0.5,1,0)
+sum(enjoyed_p == tastesgreat$enjoyed)/40
+sum(enjoyed_p != tastesgreat$enjoyed)/40
 
 # Segundo esse modelo responda:
 # Qual a probabilidade de uma mulher de 34 anos e um homem de 25,2 anos gostarem do produto?
@@ -119,9 +133,12 @@ df$idade<-as.numeric(df$Age)
 df$idade[df$Age=='']<-NA
 df$taxa<-as.numeric(df$Fare)
 df$taxa[df$Fare=='']<-NA
-df$Sex<-(df$Sex=='male')*1
+df$Sex<-(df$Sex=='female')*1
 df$Sex[df$Sex=='']<-NA
 reg<-glm(Survived ~ Sex + taxa + idade,data=df,family = binomial)
 summary(reg)
+
+predict(reg,type = 'response')
+
 
 
